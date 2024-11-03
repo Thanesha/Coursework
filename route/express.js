@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+const { ObjectId } = require('mongodb');
 
 module.exports = function(db) {
     const lessonsCollection = db.collection("lessons");
@@ -18,7 +19,7 @@ module.exports = function(db) {
 
     // Route to get a lesson by ID
     router.get("/lessons/:id", async function(req, res) {
-        const id = parseInt(req.params.id, 120);
+        const id = parseInt(req.params.id, 10);
         try {
             const lesson = await lessonsCollection.findOne({ id: id });
             if (lesson) {
@@ -91,6 +92,49 @@ router.post("/orders", async function(req, res) {
     } catch (err) {
         console.error("Error during order insertion:", err);
         return res.status(500).send("Error saving order");
+    }
+});
+
+router.get('/search', async (req, res) => {
+    const searchTerm = req.query.q; // Get the search term from the query parameters
+
+    if (!searchTerm) {
+        return res.status(400).send("Search term is required");
+    }
+
+    try {
+        const priceNumber = parseFloat(searchTerm);
+        const inventoryNumber = parseInt(searchTerm, 10);
+        // First, try to find exact matches
+        const exactMatches = await lessonsCollection.find({
+            $or: [
+                { subject: { $regex: searchTerm, $options: 'i' } },
+                { location: { $regex: searchTerm, $options: 'i' } },
+                { category: { $regex: searchTerm, $options: 'i' } },
+                { price: priceNumber }, // Match exact price
+                { availableInventory: inventoryNumber }
+            ]
+        }).toArray();
+
+        // If exact matches are found, return them
+        if (exactMatches.length > 0) {
+            return res.json(exactMatches);
+        }
+        // If no exact matches, perform a case-insensitive search
+        const lessons = await lessonsCollection.find({
+            $or: [
+                { subject: { $regex: searchTerm, $options: 'i' } },
+                { location: { $regex: searchTerm, $options: 'i' } },
+                { category: { $regex: searchTerm, $options: 'i' } },
+                { price:  priceNumber }, // This is not ideal for numbers
+                { availableInventory: inventoryNumber }
+            ]
+        }).toArray();
+
+        res.json(lessons); // Return the filtered lessons as JSON
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error searching for lessons");
     }
 });
     return router; // Return the API router
