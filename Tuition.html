@@ -16,8 +16,20 @@
             <div class="logo">
                 <img class="logo-image" src="images/logo2.jpg" alt="Tuition store Logo">
             </div>
-            <input class="search-bar" type="text" placeholder="Search...">
+            <input class="search-bar" type="text" v-model="searchQuery" @input="searchLessons" placeholder="Search for lessons..."/>
             <i class="search-icon fa-solid fa-magnifying-glass"></i>
+            <div class="search-results" v-if="searchResults.length">
+                <h2>Search Results:</h2>
+                <ul>
+                    <li v-for="lesson in searchResults" :key="lesson.id">
+                        <p>Title: {{ lesson.subject }}</p>
+                        <p>Location: {{ lesson.location }}</p>
+                        <p>Price: {{ lesson.price }}</p>
+                        <p>Available: {{ lesson.availableInventory }}</p>
+                    </li>
+                </ul>
+            </div>
+
             <div class="nav-links">
                 <a href="#">Home</a>
                 <a href="#">About</a>
@@ -25,7 +37,7 @@
             </div>
             <!-- Cart -->
             <div class="cart">
-                <i v-on:click="showcheckout">
+                <i v-on:click="showcheckout" :class="{ 'disabled': itemsInCart === 0 }">
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span>{{itemsInCart}} items</span>
                 </i>
@@ -94,6 +106,7 @@
                             <h2>Subject: {{product.subject}}</h2>
                             <p>Location: {{product.location}}</p>
                             <p>Price: {{product.price}} </p>
+                            <p>Grade: {{product.grade}} </p>
 
                             <button @click="addItemToCart(product)" v-if="canAddToCart(product)"> Add to cart</button>
                             <!-- use if here for the counter to inventory availabity -->
@@ -214,6 +227,8 @@ let webstore = new Vue({
       showproduct: true, //if true show product
       orderNumber: '',
       orderDate: '',
+      searchQuery: '', // To bind to the search input
+      searchResults: [], // To hold the results of the search
       cart: [], // new array to store cart items
 
       states: {
@@ -245,10 +260,36 @@ let webstore = new Vue({
         phone: '',
         state:''
 
-      },
+      }
     },
+
+    // Created
+    created() {
+        this.fetchLessons(); // Fetch lessons when the component is created
+    },
+
+
+
     // methods
     methods: {
+    async searchLessons() {
+        if (this.searchQuery.length < 1) {
+            this.searchResults = []; // Clear results if the search query is empty
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+            if (response.ok) {
+                this.searchResults = await response.json(); // Update search results
+            } else {
+                console.error('Error fetching search results:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+
       addItemToCart(product){
         let existingProduct = this.cart.find(item => item.id === product.id);
         let productInProducts = this.products.find(item => item.id === product.id);
@@ -262,14 +303,12 @@ let webstore = new Vue({
         },
 
       //function checkout site
-      showcheckout(){
+      showcheckout() {
+    if (this.itemsInCart > 0) {
         this.showcart = !this.showcart;
-        if(this.showcart){
-          this.showproduct = false;
-        }else{
-          this.showproduct = true;
-        }
-      },
+        this.showproduct = !this.showcart;
+    }
+    },
 
       // Function to filter products by category
       filterByCategory(category) {
@@ -308,6 +347,19 @@ let webstore = new Vue({
             this.sortAttribute = attribute;
             this.sortOrder = order;
         },
+
+        async fetchLessons() {
+            try {
+                const response = await fetch('http://localhost:8080/api/lessons');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                this.products = await response.json(); // Store the fetched lessons in the products data property
+            } catch (error) {
+                console.error('Error fetching lessons:', error);
+            }
+        },
+
         async submitForm() {
         console.log('submitForm called');
         if (this.validateForm()) {
@@ -340,7 +392,7 @@ let webstore = new Vue({
 
         // Insert the order document into the orders collection on the server
         try {
-            const response = await fetch('http://localhost:8081/api/orders', {
+            const response = await fetch('http://localhost:8080/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -367,6 +419,34 @@ let webstore = new Vue({
             console.log('form is not valid');
         }
         },
+
+        async updateAvailableSpaces() {
+    console.log("updateAvailableSpaces called");
+    const lessonUpdates = this.cart.map(product => ({
+        id: product.id,
+        availableSpaces: product.availableInventory - product.quantity
+    }));
+
+    try {
+        for (const update of lessonUpdates) {
+            console.log(`Updating lesson ID ${update.id} with available spaces: ${update.availableSpaces}`);
+            const response = await fetch(`http://localhost:8080/api/lessons/${update.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ availableInventory: update.availableSpaces })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to update lesson space: ${response.statusText}`);
+            }
+            console.log(`Updated available spaces for lesson ID ${update.id}`);
+        }
+    } catch (error) {
+        console.error('Error updating available lesson space:', error);
+    }
+},
         // function receipt
         displayReceipt() {
             // Display the receipt
@@ -384,7 +464,7 @@ let webstore = new Vue({
                 };
             }, 7000); // Clear the cart after 7seconds
         },
-
+        
         // function back to store after checkout
         backToStore() {
             document.getElementById('main-page').classList.remove('hidden');
