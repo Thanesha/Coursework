@@ -6,21 +6,23 @@
     <link rel="stylesheet" href="Tuition.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-    <script src="products.js"></script>
+    <!-- <script src="products.js"></script> -->
     <title>Tuition site</title>
 </head>
 <body> 
     <div id = "webstore">
         <!-- Navingation -->
         <nav class="nav-bar">
-            <div class="logo">
+            <div class="logo"> <!-- Logo section -->
                 <img class="logo-image" src="images/logo2.jpg" alt="Tuition store Logo">
             </div>
+            <!-- Search input bound to Vue model -->
             <input class="search-bar" type="text" v-model="searchQuery" @input="searchLessons" placeholder="Search for lessons..."/>
             <i class="search-icon fa-solid fa-magnifying-glass"></i>
             <div class="search-results" v-if="searchResults.length">
                 <h2>Search Results:</h2>
                 <ul>
+                     <!-- Loop through search results -->
                     <li v-for="lesson in searchResults" :key="lesson.id">
                         <p>Title: {{ lesson.subject }}</p>
                         <p>Location: {{ lesson.location }}</p>
@@ -29,13 +31,13 @@
                     </li>
                 </ul>
             </div>
-
+            <!-- Navigation links -->
             <div class="nav-links">
                 <a href="#">Home</a>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
             </div>
-            <!-- Cart -->
+            <!-- Cart  section -->
             <div class="cart">
                 <i v-on:click="showcheckout" :class="{ 'disabled': itemsInCart === 0 }">
                     <i class="fa-solid fa-cart-shopping"></i>
@@ -59,7 +61,7 @@
         </nav>
 
         <!-- main -->
-        <div id="main-page" v-if="!orderPlaced">
+        <div id="main-page" v-if="!orderPlaced">  <!-- Main page, shown if order is not placed -->
             <div v-if="showproduct">
                 <!-- Image display  -->
                 <div class="image-block">
@@ -69,12 +71,12 @@
                     <img src="images/Carousel4.png" alt="Image 4">
                 </div>
                 <div class="products-container">
-                    <!-- Filter  -->
+                    <!-- Filter option -->
                     <div class="filter-category">
                         <h3>Filter</h3>
                         <h2>by Subject</h2>
                         <ul>
-                            <!-- using v-for: A list item element that will be repeated for each item in the categories array -->
+                        <!-- using v-for: A list item element that will be repeated for each item in the categories array -->
                         <li v-for="(category, index) in categories" :key="index">
                         <input type="checkbox" :id="category" :value="category" v-model="selectedCategories" @click="filterByCategory(category)">
                         <label :for="category">{{ category }}</label></li>
@@ -82,6 +84,7 @@
 
                         <h2>by Grade</h2>
                         <ul>
+                        <!-- Loop through grades -->   
                         <li v-for="(grade, index) in grade" :key="index">
                         <input type="checkbox" :id="grade" :value="grade" v-model="selectedGrades" @click="filterByGrade(grade)">
                         <label :for="grade">{{ grade }}</label></li>
@@ -89,7 +92,7 @@
                             <!-- A select element that allows the user to choose a sort attribute -->
                         <div class="sort-options">
                             <h2>Sort by </h2>
-                            <select v-model="sortAttribute">
+                            <select v-model="sortAttribute"> <!-- Select attribute for sorting -->
                             <option value="price">Price</option>
                             <option value="location">location</option>
                             <option value="rating">Rating</option>
@@ -99,9 +102,10 @@
                         <button @click="updateSort(sortAttribute, 'asc')">Ascending</button>
                         <button @click="updateSort(sortAttribute, 'desc')">Descending</button>
                     </div>
-                    
+
+                    <!-- Container for product list -->
                     <div class="products">
-                        <div v-for="(product, index) in filteredProducts" :key="index">
+                        <div v-for="(product, index) in filteredProducts" :key="index"> <!-- Loop through filtered products -->
                             <figure><img v-bind:src="product.image" alt="Product image"></figure>
                             <h2>Subject: {{product.subject}}</h2>
                             <p>Location: {{product.location}}</p>
@@ -126,7 +130,7 @@
               </div>
             </div>
             <div v-else>
-                <!-- Checkout  -->
+                <!-- Display checkout if showproduct is false -->
                 <div class="checkout">
                     <div class="left">
                       <h1> welcome to checkout</h1>
@@ -139,6 +143,7 @@
                         <!-- This input field is bound to 'lastName' in the 'order' object -->
                          <input v-model="order.lastName"/>
                         </p>
+                        <!-- input field for other details -->
                         <p><strong>Phone:</strong> <input v-model="order.phone" type="text"/></p>
                         <p><strong>Address:</strong> <input v-model="order.address"/></p>
                         <p><strong>City:</strong> <input v-model="order.city"/></p>
@@ -159,8 +164,9 @@
                     <div class="right">
                         <!-- order info -->
                         <h2>Order Information</h2>
-                        <div class="cart">
+                        <div class="cart"> <!-- Cart details -->
                             <table>
+                            <!-- Loop through cart items -->
                             <tr v-for="(product, index) in cart" :key="index">
                                 <td><img v-bind:src="product.image" width="60" height="90"></td>
                                 <td>{{ product.subject }}</td>
@@ -215,22 +221,23 @@
 let webstore = new Vue({
     el: '#webstore',
     data: {
-      sortAttribute: '',
-      sortOrder: 'asc',
-      products:products,
-      orderPlaced: false,
+        sortAttribute: '', // Attribute to sort products by (e.g., price, location, rating)
+      sortOrder: 'asc', // Sorting order (ascending or descending)
+      products: [], 
+      orderPlaced: false, // Flag to indicate if an order has been placed
       message: 'Welcome to the Tuition Store',
       categories: ['Maths', 'Computer Science', 'Music', 'English', 'French', 'Literature', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Art and Design', 'Accounting', 'Spanish', 'History'],
-      grade: ['10', '11', '12', '13'],
-      selectedCategories: [],
-      selectedGrades: [],
-      showproduct: true, //if true show product
-      orderNumber: '',
-      orderDate: '',
-      searchQuery: '', // To bind to the search input
+      grade: ['10', '11', '12', '13'], // List of grades
+      selectedCategories: [], // Array to hold selected categories for filtering
+      selectedGrades: [], // Array to hold selected grades for filtering
+      showproduct: true, // Flag to control the visibility of product listings
+      orderNumber: '', // To store the generated order number
+      orderDate: '', // To store the order date
+      searchQuery: '', // To bind to the search input field
       searchResults: [], // To hold the results of the search
-      cart: [], // new array to store cart items
+      cart: [], // Array to store items added to the cart
 
+      // Object to hold states and their corresponding cities
       states: {
         LDN: 'London',
         MCR: 'Manchester',
@@ -251,6 +258,7 @@ let webstore = new Vue({
         OXF: 'Oxford',
       },
 
+      // Object to hold order details
       order: {
         firstName: '',
         lastName: '',
@@ -272,6 +280,7 @@ let webstore = new Vue({
 
     // methods
     methods: {
+    // Method to search for lessons based on the search query
     async searchLessons() {
         if (this.searchQuery.length < 1) {
             this.searchResults = []; // Clear results if the search query is empty
@@ -279,7 +288,7 @@ let webstore = new Vue({
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(this.searchQuery)}`); // Fetch search results from the API
             if (response.ok) {
                 this.searchResults = await response.json(); // Update search results
             } else {
@@ -289,12 +298,12 @@ let webstore = new Vue({
             console.error('Error:', error);
         }
     },
-
+        // Method to add an item to the shopping cart
       addItemToCart(product){
-        let existingProduct = this.cart.find(item => item.id === product.id);
-        let productInProducts = this.products.find(item => item.id === product.id);
+        let existingProduct = this.cart.find(item => item.id === product.id);// Check if the product is already in the cart
+        let productInProducts = this.products.find(item => item.id === product.id);// Find the product in the products array
         if (existingProduct) {
-         existingProduct.quantity++;
+         existingProduct.quantity++; //Increment the quantity if the product is already in the cart
          productInProducts.availableInventory--;
         } else {
             this.cart.push({ ...product, quantity: 1 });
@@ -327,7 +336,7 @@ let webstore = new Vue({
           this.selectedGrades.push(grade);
         }
       },
-
+      // Method to sort products
       sortProducts(products) {
         if (this.sortAttribute) {
          products.sort((a, b) => {
@@ -343,11 +352,13 @@ let webstore = new Vue({
         return products;
         },
 
+        // Method to update the sort attribute and order
         updateSort(attribute, order) {
             this.sortAttribute = attribute;
             this.sortOrder = order;
         },
 
+        // Method to fetch lessons from the API
         async fetchLessons() {
             try {
                 const response = await fetch('http://localhost:8080/api/lessons');
@@ -360,6 +371,7 @@ let webstore = new Vue({
             }
         },
 
+        // Method to submit the order form
         async submitForm() {
         console.log('submitForm called');
         if (this.validateForm()) {
@@ -371,6 +383,7 @@ let webstore = new Vue({
             this.orderDate = new Date().toLocaleDateString();
             this.showproduct = true;
 
+            // Create an order object to send to the API
             const order = {
             orderNumber: this.orderNumber,
             orderDate: this.orderDate,
@@ -419,39 +432,39 @@ let webstore = new Vue({
             console.log('form is not valid');
         }
         },
-
+        
+        // Method to update available spaces for lessons
         async updateAvailableSpaces() {
-    console.log("updateAvailableSpaces called");
-    const lessonUpdates = this.cart.map(product => ({
-        id: product.id,
-        availableSpaces: product.availableInventory - product.quantity
-    }));
+        console.log("updateAvailableSpaces called");
+        const lessonUpdates = this.cart.map(product => ({
+            id: product.id,
+            availableSpaces: product.availableInventory - product.quantity
+        }));
 
-    try {
-        for (const update of lessonUpdates) {
-            console.log(`Updating lesson ID ${update.id} with available spaces: ${update.availableSpaces}`);
-            const response = await fetch(`http://localhost:8080/api/lessons/${update.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ availableInventory: update.availableSpaces })
-            });
+            try {
+                for (const update of lessonUpdates) {
+                    console.log(`Updating lesson ID ${update.id} with available spaces: ${update.availableSpaces}`);
+                    const response = await fetch(`http://localhost:8080/api/lessons/${update.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ availableInventory: update.availableSpaces })
+                    });
 
-            if (!response.ok) {
-                throw new Error(`Failed to update lesson space: ${response.statusText}`);
+                    if (!response.ok) {
+                        throw new Error(`Failed to update lesson space: ${response.statusText}`);
+                    }
+                    console.log(`Updated available spaces for lesson ID ${update.id}`);
+                }
+            } catch (error) {
+                console.error('Error updating available lesson space:', error);
             }
-            console.log(`Updated available spaces for lesson ID ${update.id}`);
-        }
-    } catch (error) {
-        console.error('Error updating available lesson space:', error);
-    }
-},
-        // function receipt
+        },
+        // method to display receipt
         displayReceipt() {
-            // Display the receipt
+            
             this.orderPlaced = true;
-            //document.getElementById('main-page').classList.add('hidden');
             // Clear the cart and order information after a short delay
             setTimeout(() => {
                 this.cart = [];
@@ -465,11 +478,12 @@ let webstore = new Vue({
             }, 7000); // Clear the cart after 7seconds
         },
         
-        // function back to store after checkout
+        // method back to store after checkout
         backToStore() {
             document.getElementById('main-page').classList.remove('hidden');
         },
 
+         // Method to count the number of items in the cart for a given product ID
         cartCount(id) {
             let count = 0;
             for(let i = 0; i < this.cart.length; i++)
@@ -477,11 +491,12 @@ let webstore = new Vue({
             return count;
         },
 
+        // Method to check if a product can be added to the cart
         canAddToCart(product){
-            return product.availableInventory > this.cartCount(product.id); //could be greater or equal to zero 
+            return product.availableInventory > this.cartCount(product.id); 
         }, 
 
-        //function removing 1 item 
+        //method removing 1 item 
         removeProductFromCart(product) {
         let existingProduct = this.cart.find(item => item.id === product.id);
         let productInProducts = this.products.find(item => item.id === product.id);
@@ -494,10 +509,9 @@ let webstore = new Vue({
                 productInProducts.availableInventory++;
             }
         }
-      //this.cart = this.cart.filter(product => product.id !== product.id);
         },
 
-        // validation forr checkout
+        // validation for checkout
         validateForm() {
         const firstName = this.order.firstName;
         const lastName = this.order.lastName;
@@ -528,7 +542,7 @@ let webstore = new Vue({
         }
     },
 
-    // Computed
+    // Computed properties
     computed: {
         itemsInCart() {
         return this.cart.length ||  ""  // return the length of the cart array
@@ -548,10 +562,6 @@ let webstore = new Vue({
         // Calculate total
         total() {
         return this.subtotal + this.tax;
-        },
-
-        carouselStyle() {
-        return {transform: `translateX(-${this.currentCarouselIndex * 100}%)`}
         },
 
         filteredProducts() {
