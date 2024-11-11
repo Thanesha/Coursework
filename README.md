@@ -27,6 +27,7 @@ To run this project locally, clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/Thanesha/Vue-Tuition-app.git
+cd Vue-Tuition-app
 npm install
 npm npm start
 
