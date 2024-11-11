@@ -8,10 +8,10 @@ It features product filtering, a shopping cart, and a checkout process.
 - [Tuition App](App)  
   This is the link to the GitHub repository to find the source code.
   
-  - [Express.js](route)  
+- [Express.js](route)  
   This is the link to the GitHub repository to find the expres.js and server code.
 
-- [Live Demo on GitHub Pages]((http://127.0.0.1:8080/))  
+- [Live Demo on GitHub Pages](http://127.0.0.1:8080/)  
   This link will take you to the live version of the app where you can interact with it directly.
 
 ## Features
@@ -26,7 +26,6 @@ It features product filtering, a shopping cart, and a checkout process.
 To run this project locally, clone the repository and install the dependencies:
 
 ```bash
-git clone https://github.com/yourusername/your-repository-name.git
-cd your-repository-name
+git clone https://github.com/Thanesha/Vue-Tuition-app.git
 npm install
-npm run serve
+npm npm start
