@@ -5,8 +5,8 @@ It features product filtering, a shopping cart, and a checkout process.
 
 ## Links
 
-- [GitHub Repository](https://github.com/yourusername/your-repository-name)  
-  This is the link to the GitHub repository where you can find the source code and contribute to the project.
+- [GitHub Repository](App)  
+  This is the link to the GitHub repository where you can find the source code.
 
 - [Live Demo on GitHub Pages](https://yourusername.github.io/your-repository-name)  
   This link will take you to the live version of the app where you can interact with it directly.
