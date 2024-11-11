@@ -29,3 +29,5 @@ To run this project locally, clone the repository and install the dependencies:
 git clone https://github.com/Thanesha/Vue-Tuition-app.git
 npm install
 npm npm start
+
+After running the server you will be able to interact with the live demo
