@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Tuition.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <script src="products.js"></script>
+    <title>Tuition site</title>
+</head>
+<body> 
+    <div id = "webstore">
+        <!-- Navingation -->
+        <nav class="nav-bar">
+            <div class="logo">
+                <img class="logo-image" src="images/logo2.jpg" alt="Tuition store Logo">
+            </div>
+            <input class="search-bar" type="text" v-model="searchQuery" @input="searchLessons" placeholder="Search for lessons..."/>
+            <i class="search-icon fa-solid fa-magnifying-glass"></i>
+            <div class="search-results" v-if="searchResults.length">
+                <h2>Search Results:</h2>
+                <ul>
+                    <li v-for="lesson in searchResults" :key="lesson.id">
+                        <p>Title: {{ lesson.subject }}</p>
+                        <p>Location: {{ lesson.location }}</p>
+                        <p>Price: {{ lesson.price }}</p>
+                        <p>Available: {{ lesson.availableInventory }}</p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+            <!-- Cart -->
+            <div class="cart">
+                <i v-on:click="showcheckout" :class="{ 'disabled': itemsInCart === 0 }">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>{{itemsInCart}} items</span>
+                </i>
+            </div>
+            <!-- Wishlist -->
+            <div class="wishlist">
+                <a href="#">
+                    <i class="fa-solid fa-heart"></i>
+                    <span class="Wish-text">Wishlist</span>
+                </a>
+            </div>
+                <!-- sign in -->
+            <div class="sign-in">
+                <a href="#">
+                  <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                  <span class="sign-in-text">Sign In/Sign Up</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- main -->
+        <div id="main-page" v-if="!orderPlaced">
+            <div v-if="showproduct">
+                <!-- Image display  -->
+                <div class="image-block">
+                    <img src="images/Carousel3.png" alt="Image 1">
+                    <img src="images/Carousel2.png" alt="Image 2">
+                    <img src="images/Carousel.gif" alt="Image 3">
+                    <img src="images/Carousel4.png" alt="Image 4">
+                </div>
+                <div class="products-container">
+                    <!-- Filter  -->
+                    <div class="filter-category">
+                        <h3>Filter</h3>
+                        <h2>by Subject</h2>
+                        <ul>
+                            <!-- using v-for: A list item element that will be repeated for each item in the categories array -->
+                        <li v-for="(category, index) in categories" :key="index">
+                        <input type="checkbox" :id="category" :value="category" v-model="selectedCategories" @click="filterByCategory(category)">
+                        <label :for="category">{{ category }}</label></li>
+                        </ul>
+
+                        <h2>by Grade</h2>
+                        <ul>
+                        <li v-for="(grade, index) in grade" :key="index">
+                        <input type="checkbox" :id="grade" :value="grade" v-model="selectedGrades" @click="filterByGrade(grade)">
+                        <label :for="grade">{{ grade }}</label></li>
+                        </ul>
+                            <!-- A select element that allows the user to choose a sort attribute -->
+                        <div class="sort-options">
+                            <h2>Sort by </h2>
+                            <select v-model="sortAttribute">
+                            <option value="price">Price</option>
+                            <option value="location">location</option>
+                            <option value="rating">Rating</option>
+                            </select>
+                        
+                        </div>
+                        <button @click="updateSort(sortAttribute, 'asc')">Ascending</button>
+                        <button @click="updateSort(sortAttribute, 'desc')">Descending</button>
+                    </div>
+                    
+                    <div class="products">
+                        <div v-for="(product, index) in filteredProducts" :key="index">
+                            <figure><img v-bind:src="product.image" alt="Product image"></figure>
+                            <h2>Subject: {{product.subject}}</h2>
+                            <p>Location: {{product.location}}</p>
+                            <p>Price: {{product.price}} </p>
+                            <p>Grade: {{product.grade}} </p>
+
+                            <button @click="addItemToCart(product)" v-if="canAddToCart(product)"> Add to cart</button>
+                            <!-- use if here for the counter to inventory availabity -->
+                            <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
+                            <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
+                            Only {{product.availableInventory - cartCount(product.id)}} spaces left!
+                            </span>
+                            <span v-else >Buy now!</span>
+                            
+                            <!-- rating -->
+                            <div>
+                                <span v-for='n in product.rating'>★</span>
+                                <span v-for='n in 5 - product.rating'>☆</span>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+            </div>
+            <div v-else>
+                <!-- Checkout  -->
+                <div class="checkout">
+                    <div class="left">
+                      <h1> welcome to checkout</h1>
+                      <p><strong>First Name:</strong>
+                       <!-- This input field is bound to 'firstName' in the 'order' object --> 
+                        <input v-model.trim="order.firstName"/>
+                      </p>
+                      <p>
+                        <strong>Last Name:</strong>
+                        <!-- This input field is bound to 'lastName' in the 'order' object -->
+                         <input v-model="order.lastName"/>
+                        </p>
+                        <p><strong>Phone:</strong> <input v-model="order.phone" type="text"/></p>
+                        <p><strong>Address:</strong> <input v-model="order.address"/></p>
+                        <p><strong>City:</strong> <input v-model="order.city"/></p>
+                        <p><strong>State:</strong>
+                            <select v-model="order.state">
+                                <option disabled value="">State</option>
+                                <option v-for="(state, key) in states"
+                                v-bind:value="state">
+                                {{key}}
+                                </option>
+                            </select>
+                        </p>
+                        <p>
+                            <strong>Zip/Postal Code:</strong> 
+                            <input v-model.number="order.zip" type="number"/>
+                        </p>
+                    </div>
+                    <div class="right">
+                        <!-- order info -->
+                        <h2>Order Information</h2>
+                        <div class="cart">
+                            <table>
+                            <tr v-for="(product, index) in cart" :key="index">
+                                <td><img v-bind:src="product.image" width="60" height="90"></td>
+                                <td>{{ product.subject }}</td>
+                                <td>${{ product.price }}</td>
+                                <td>Quantity: {{ product.quantity }}</td>
+                                <td>Total: {{ product.price * product.quantity }}</td>
+                                <td><button @click="removeProductFromCart(product)">Remove</button></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Subtotal:</td>
+                                <td>{{ subtotal }}</td>
+                            </tr>
+                            <tr><td colspan="2">Tax (10%):</td>
+                                <td>{{ tax }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Total:</td>
+                                <td>{{ total }}</td>
+                            </tr>
+                            </table>
+                        </div>
+                        <button @click="submitForm">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add a new div to hold the receipt -->
+        <div id="receipt" v-if="orderPlaced">
+            <h2>Order Receipt</h2>
+            <p>Order Number: {{ orderNumber }}</p>
+            <p>Order Date: {{ orderDate }}</p>
+            <p>Customer Name: {{ order.firstName }} {{ order.lastName }}</p>
+            <p>Address: {{ order.address }}, {{ order.city }}, {{ order.state }} {{ order.zip }}</p>
+            <p>Order Total: ${{ total }}</p>
+            <h3>Order Details:</h3>
+            <table>
+                <tr v-for="(product, index) in cart" :key="index">
+                    <td><img v-bind:src="product.image" width="60" height="90"></td>
+                    <td>{{ product.subject }}</td>
+                    <td>Quantity: {{ product.quantity }}</td>
+                    <td>Price: ${{ product.price }}</td>
+                    <td>Total: ${{ product.price * product.quantity }}</td>
+                </tr>
+            </table>
+            <button @click="orderPlaced = false">Back to checkout</button>
+        </div>
+    </div>
+
+    <!-- script -->
+<script>
+
+let webstore = new Vue({
+    el: '#webstore',
+    data: {
+      sortAttribute: '',
+      sortOrder: 'asc',
+      products:products,
+      orderPlaced: false,
+      message: 'Welcome to the Tuition Store',
+      categories: ['Maths', 'Computer Science', 'Music', 'English', 'French', 'Literature', 'Physics', 'Chemistry', 'Biology', 'Economics', 'Art and Design', 'Accounting', 'Spanish', 'History'],
+      grade: ['10', '11', '12', '13'],
+      selectedCategories: [],
+      selectedGrades: [],
+      showproduct: true, //if true show product
+      orderNumber: '',
+      orderDate: '',
+      searchQuery: '', // To bind to the search input
+      searchResults: [], // To hold the results of the search
+      cart: [], // new array to store cart items
+
+      states: {
+        LDN: 'London',
+        MCR: 'Manchester',
+        BHM: 'Birmingham',
+        LIV: 'Liverpool',
+        EDI: 'Edinburgh',
+        LDS: 'Leeds',
+        BRS: 'Bristol',
+        CDF: 'Cardiff',
+        SHF: 'Sheffield',
+        NCL: 'Newcastle',
+        NTT: 'Nottingham',
+        LCE: 'Leicester',
+        SOU: 'Southampton',
+        CVT: 'Coventry',
+        DRB: 'Derby',
+        BTN: 'Brighton',
+        OXF: 'Oxford',
+      },
+
+      order: {
+        firstName: '',
+        lastName: '',
+        address: '',
+        city: '',
+        zip: '',
+        phone: '',
+        state:''
+
+      }
+    },
+
+    // Created
+    created() {
+        this.fetchLessons(); // Fetch lessons when the component is created
+    },
+
+
+
+    // methods
+    methods: {
+    async searchLessons() {
+        if (this.searchQuery.length < 1) {
+            this.searchResults = []; // Clear results if the search query is empty
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(this.searchQuery)}`);
+            if (response.ok) {
+                this.searchResults = await response.json(); // Update search results
+            } else {
+                console.error('Error fetching search results:', response.status);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    },
+
+      addItemToCart(product){
+        let existingProduct = this.cart.find(item => item.id === product.id);
+        let productInProducts = this.products.find(item => item.id === product.id);
+        if (existingProduct) {
+         existingProduct.quantity++;
+         productInProducts.availableInventory--;
+        } else {
+            this.cart.push({ ...product, quantity: 1 });
+            productInProducts.availableInventory--;
+        }
+        },
+
+      //function checkout site
+      showcheckout() {
+    if (this.itemsInCart > 0) {
+        this.showcart = !this.showcart;
+        this.showproduct = !this.showcart;
+    }
+    },
+
+      // Function to filter products by category
+      filterByCategory(category) {
+        if (this.selectedCategories.includes(category)) {
+          this.selectedCategories = this.selectedCategories.filter(c => c !== category);
+        } else {
+          this.selectedCategories.push(category);
+        }
+      },
+
+      // Function to filter products by grade
+      filterByGrade(grade) {
+      if (this.selectedGrades.includes(grade)) {
+          this.selectedGrades = this.selectedGrades.filter(g => g !== grade);
+        } else {
+          this.selectedGrades.push(grade);
+        }
+      },
+
+      sortProducts(products) {
+        if (this.sortAttribute) {
+         products.sort((a, b) => {
+            if (this.sortAttribute === 'price') {
+             return this.sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+            } else if (this.sortAttribute === 'location') {
+                return this.sortOrder === 'asc' ? a.location.localeCompare(b.location) : b.subject.localeCompare(a.location);
+            } else if (this.sortAttribute === 'rating') {
+                return this.sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
+            }
+            });
+        }
+        return products;
+        },
+
+        updateSort(attribute, order) {
+            this.sortAttribute = attribute;
+            this.sortOrder = order;
+        },
+
+        async fetchLessons() {
+            try {
+                const response = await fetch('http://localhost:8080/api/lessons');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                this.products = await response.json(); // Store the fetched lessons in the products data property
+            } catch (error) {
+                console.error('Error fetching lessons:', error);
+            }
+        },
+
+        async submitForm() {
+        console.log('submitForm called');
+        if (this.validateForm()) {
+            console.log('form is valid');
+            // If the form is valid, submit it
+            alert("order submit");
+            this.orderPlaced = true;
+            this.orderNumber = Math.floor(Math.random() * 1000000);
+            this.orderDate = new Date().toLocaleDateString();
+            this.showproduct = true;
+
+            const order = {
+            orderNumber: this.orderNumber,
+            orderDate: this.orderDate,
+            customer: {
+                firstName: this.order.firstName,
+                lastName: this.order.lastName,
+                address: this.order.address,
+                city: this.order.city,
+                zip: this.order.zip,
+                phone: this.order.phone,
+                state: this.order.state
+            },
+            products: this.cart,
+            subtotal: this.subtotal,
+            tax: this.tax,
+            total: this.total
+        };
+        console.log('Order to be submitted:', order); // Log the order data
+
+        // Insert the order document into the orders collection on the server
+        try {
+            const response = await fetch('http://localhost:8080/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order) // Send the order data as JSON
+            });
+
+            if (response.ok) {
+                const insertedOrder = await response.json();
+                console.log('Order inserted into MongoDB successfully:', insertedOrder);
+                this.orderPlaced = true; // Set orderPlaced to true to show receipt
+                this.orderNumber = insertedOrder.orderNumber; // Get the order number from the response
+                this.orderDate = insertedOrder.orderDate; // Get the order date from the response
+            } else {
+                console.error('Failed to insert order:', response.status);
+                alert('There was an error placing your order. Please try again.');
+            }
+        } catch (err) {
+            console.error('Error inserting order into MongoDB:', err);
+            alert('There was an error placing your mongoooo. Please try again.');
+        }
+        this.displayReceipt() ;// Call the displayReceipt method
+        } else {
+            console.log('form is not valid');
+        }
+        },
+
+        async updateAvailableSpaces() {
+    console.log("updateAvailableSpaces called");
+    const lessonUpdates = this.cart.map(product => ({
+        id: product.id,
+        availableSpaces: product.availableInventory - product.quantity
+    }));
+
+    try {
+        for (const update of lessonUpdates) {
+            console.log(`Updating lesson ID ${update.id} with available spaces: ${update.availableSpaces}`);
+            const response = await fetch(`http://localhost:8080/api/lessons/${update.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ availableInventory: update.availableSpaces })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to update lesson space: ${response.statusText}`);
+            }
+            console.log(`Updated available spaces for lesson ID ${update.id}`);
+        }
+    } catch (error) {
+        console.error('Error updating available lesson space:', error);
+    }
+},
+        // function receipt
+        displayReceipt() {
+            // Display the receipt
+            this.orderPlaced = true;
+            //document.getElementById('main-page').classList.add('hidden');
+            // Clear the cart and order information after a short delay
+            setTimeout(() => {
+                this.cart = [];
+                this.order = {
+                    firstName: '',
+                    lastName: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                };
+            }, 7000); // Clear the cart after 7seconds
+        },
+        
+        // function back to store after checkout
+        backToStore() {
+            document.getElementById('main-page').classList.remove('hidden');
+        },
+
+        cartCount(id) {
+            let count = 0;
+            for(let i = 0; i < this.cart.length; i++)
+            {if (this.cart[i] === id) {count++;}}
+            return count;
+        },
+
+        canAddToCart(product){
+            return product.availableInventory > this.cartCount(product.id); //could be greater or equal to zero 
+        }, 
+
+        //function removing 1 item 
+        removeProductFromCart(product) {
+        let existingProduct = this.cart.find(item => item.id === product.id);
+        let productInProducts = this.products.find(item => item.id === product.id);
+        if (existingProduct) {
+            if (existingProduct.quantity > 1) {
+                existingProduct.quantity--;
+                productInProducts.availableInventory++;
+            } else {
+                this.cart = this.cart.filter(item => item.id !== product.id);
+                productInProducts.availableInventory++;
+            }
+        }
+      //this.cart = this.cart.filter(product => product.id !== product.id);
+        },
+
+        // validation forr checkout
+        validateForm() {
+        const firstName = this.order.firstName;
+        const lastName = this.order.lastName;
+        const address = this.order.address;
+        const city = this.order.city;
+        const zip = this.order.zip;
+        const phone = this.order.phone;
+        const state = this.order.state;
+        // Validate first name and last name (letters only)
+        const name = /^[a-zA-Z]+$/;
+        if (!name.test(firstName) || !name.test(lastName)) {
+            alert("Please enter a valid name (letters only)");
+            return false;
+        }
+        // Validate phone number (numbers only)
+        const phonenum = /^[0-9]+$/;
+        if (!phonenum.test(phone)) {
+            alert("Please enter a valid phone number (numbers only)");
+            return false;
+        }
+        // Validate address, city, and zip
+        if (address=== "" || city === "" || zip === "" || state === "") {
+            alert("Please fill in all required fields");
+            return false;
+        }
+        // If all fields are valid, return true
+        return true;
+        }
+    },
+
+    // Computed
+    computed: {
+        itemsInCart() {
+        return this.cart.length ||  ""  // return the length of the cart array
+        //return this.cart.reduce((acc, item) => acc + item.quantity, 0);
+        },
+
+        // Calculate subtotal
+        subtotal() {
+        return this.cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+        },
+
+        // Calculate tax
+        tax() {
+        return this.subtotal * 0.1;
+        },
+
+        // Calculate total
+        total() {
+        return this.subtotal + this.tax;
+        },
+
+        carouselStyle() {
+        return {transform: `translateX(-${this.currentCarouselIndex * 100}%)`}
+        },
+
+        filteredProducts() {
+        let products = this.products.filter(product => {
+        // Filter by category
+        if (this.selectedCategories.length > 0 && !this.selectedCategories.includes(product.category || '')) {
+            return false;
+        }
+        // Filter by grade
+        if (this.selectedGrades.length > 0 && !this.selectedGrades.includes(product.grade || '')) {
+            return false;
+        }
+        return true;
+        });
+        return this.sortProducts(products);
+        },
+
+    }
+});
+</script>
+</body>
+</html>
