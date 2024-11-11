@@ -11,7 +11,7 @@ It features product filtering, a shopping cart, and a checkout process.
   - [Express.js](route)  
   This is the link to the GitHub repository to find the expres.js and server code.
 
-- [Live Demo on GitHub Pages]([https://yourusername.github.io/your-repository-name](http://127.0.0.1:8080/))  
+- [Live Demo on GitHub Pages]((http://127.0.0.1:8080/))  
   This link will take you to the live version of the app where you can interact with it directly.
 
 ## Features
