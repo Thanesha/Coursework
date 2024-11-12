@@ -1,0 +1,490 @@
+{
+	"info": {
+		"_postman_id": "06f93708-8859-4704-b48c-e2ae9272addb",
+		"name": "New Collection",
+		"description": "test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32876481"
+	},
+	"item": [
+		{
+			"name": "delete a lesson by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {      \r\n              \"id\":134,\r\n       \"subject\":\"History Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 135,\r\n       \"image\": \"images/history2.png\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":1,\r\n       \"quantity\":0,\r\n       \"category\": \"History\",\r\n       \"grade\":13\r\n\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/lessons/131",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"lessons",
+						"131"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all lessons",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {      \r\n              \"id\":134,\r\n       \"subject\":\"History Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 135,\r\n       \"image\": \"images/history2.png\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":1,\r\n       \"quantity\":0,\r\n       \"category\": \"History\",\r\n       \"grade\":13\r\n\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/lessons",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get lesson by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {      \r\n              \"id\":134,\r\n       \"subject\":\"History Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 135,\r\n       \"image\": \"images/history2.png\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":1,\r\n       \"quantity\":0,\r\n       \"category\": \"History\",\r\n       \"grade\":13\r\n\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/lessons/118",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"lessons",
+						"118"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {      \r\n              \"id\":134,\r\n       \"subject\":\"History Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 135,\r\n       \"image\": \"images/history2.png\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":1,\r\n       \"quantity\":0,\r\n       \"category\": \"History\",\r\n       \"grade\":13\r\n\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/orders",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get search",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {      \r\n              \"id\":134,\r\n       \"subject\":\"History Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 135,\r\n       \"image\": \"images/history2.png\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":1,\r\n       \"quantity\":0,\r\n       \"category\": \"History\",\r\n       \"grade\":13\r\n\r\n    }\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/search?q=Man",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Man"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put a lesson",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "      {\r\n       \"id\":131,\r\n       \"subject\":\"Art and Design Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 101,\r\n       \"image\": \"images/Art.gif\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":4,\r\n       \"quantity\":0,\r\n       \"category\": \"Art and Design\",\r\n       \"grade\":12\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/lessons/131",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"lessons",
+						"131"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post lessons",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{       \"id\":131,\r\n       \"subject\":\"Art and Design Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 101,\r\n       \"image\": \"images/Art.gif\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":4,\r\n       \"quantity\":0,\r\n       \"category\": \"Art and Design\",\r\n       \"grade\":12\r\n       }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://vue-tuition-app.onrender.com/api/lessons",
+					"protocol": "https",
+					"host": [
+						"vue-tuition-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"api",
+						"lessons"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get image",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{       \"id\":131,\r\n       \"subject\":\"Art and Design Lesson\",\r\n       \"location\": \"York\",\r\n       \"price\": 101,\r\n       \"image\": \"images/Art.gif\",\r\n       \"availableInventory\": 5,\r\n       \"rating\":4,\r\n       \"quantity\":0,\r\n       \"category\": \"Art and Design\",\r\n       \"grade\":12\r\n       }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thanesha.github.io/App/images/Accounting.png",
+					"protocol": "https",
+					"host": [
+						"thanesha",
+						"github",
+						"io"
+					],
+					"path": [
+						"App",
+						"images",
+						"Accounting.png"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
