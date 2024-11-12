@@ -94,8 +94,9 @@
                             <h2>Sort by </h2>
                             <select v-model="sortAttribute"> <!-- Select attribute for sorting -->
                             <option value="price">Price</option>
-                            <option value="location">location</option>
+                            <option value="location">Location</option>
                             <option value="rating">Rating</option>
+                            <option value="availableInventory">Available Inventory</option>
                             </select>
                         
                         </div>
@@ -361,6 +362,8 @@ let webstore = new Vue({
                 return this.sortOrder === 'asc' ? a.location.localeCompare(b.location) : b.subject.localeCompare(a.location);
             } else if (this.sortAttribute === 'rating') {
                 return this.sortOrder === 'asc' ? a.rating - b.rating : b.rating - a.rating;
+            } else if (this.sortAttribute === 'availableInventory') { 
+                return this.sortOrder === 'asc' ? a.availableInventory - b.availableInventory : b.availableInventory - a.availableInventory;
             }
             });
         }
