@@ -5,7 +5,7 @@ It features product filtering, a shopping cart, and a checkout process.
 
 ## Links
 
-- [Tuition App](https://github.com/Thanesha/Vue-Tuition-app/blob/main/App/Tuition.html)
+- [Tuition App](App/Tuition.html)
   This is the link to the GitHub repository to find the source code.
   
 - [Express.js](route)  
