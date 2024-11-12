@@ -1,47 +1,61 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 const cors = require('cors'); // Import cors
 
 const apiRouter = require("./route/express"); // Import the API router
+
+const propertiesReader = require('properties-reader');
+const properties = propertiesReader('new.properties');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(cors());
 
 // MongoDB connection
-const url = 'mongodb+srv://Th660:UcY1CUjA9tv7jVpW@cluster0.cxk7ils.mongodb.net/';
-const client = new MongoClient(url);
-let db;
+// const url = 'mongodb+srv://Th660:UcY1CUjA9tv7jVpW@cluster0.cxk7ils.mongodb.net/';
+// const client = new MongoClient(url);
+// let db;
+
+
+const dbprefix = properties.get('db.prefix');
+const dbhost = properties.get('db.host');
+const dbname = properties.get('db.name');
+const dbuser = properties.get('db.user');
+const dbpassword= properties.get('db.password');
+const dbParams = properties.get('db.Params');
+// MongoDB connection
+const url = `${dbprefix}${dbuser}:${dbpassword}@${dbhost}${dbname}${dbParams}` ;
+const client = new MongoClient(url, { serverapi: ServerApiVersion.v1});
+ let db;
 
 // Connect to MongoDB
 async function connectDB() {
     try {
         await client.connect();
-        db = client.db("Coursework1"); // Replace with your database name
+        db = client.db("Coursework1"); // database
         console.log("Connected to MongoDB");
     } catch (err) {
         console.error("MongoDB connection error:", err);
     }
 }
-
+app.param('collectionName', function(req, res, next, collectionName) { req.collection = db.collection(collectionName); return next(); });
 // Start the server and connect to the database
 async function startServer() {
     await connectDB(); // Ensure the database is connected
-
-    // Use the API router with the "/api" prefix
-    app.use("/api", apiRouter(db)); // Pass the db instance to the router
-
+    
     // Middleware to log incoming requests
     app.use(function(req, res, next) {
         console.log("Request URL: " + req.url);
         next();
     });
 
+    app.use("/api", apiRouter(db)); // Pass the db instance to the router
+
     // Middleware to serve image files
     app.use("/Images", function(req, res, next) {
-        const filePath = path.join(__dirname, "images", req.url);
+        const filePath = path.join(__dirname, "Images", req.url);
         fs.stat(filePath, function(err, fileInfo) {
             if (err) {
                 next(); // go to the next middleware if the file doesn't exist
@@ -57,7 +71,7 @@ async function startServer() {
 
     // Middleware for handling 404 errors
     app.use(function(req, res) {
-        res.status(404).send("Resource not found"); // send 404 error message
+        res.status(404).send("File not found"); // send 404 error message
     });
 
     // Start the server
