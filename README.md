@@ -21,7 +21,7 @@ It features product filtering, a shopping cart, and a checkout process.
 ## Features
 
 - Browse products by category and grade
-- Add products to cart
+- Add products to the cart
 - Checkout process with form validation
 - Order receipt display after purchase
 
@@ -34,6 +34,6 @@ git clone https://github.com/Thanesha/Vue-Tuition-app.git
 cd Vue-Tuition-app
 
 npm install
-npm npm start
+npm start
 
 
