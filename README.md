@@ -11,7 +11,7 @@ It features product filtering, a shopping cart, and a checkout process.
 - [Express.js](route)  
   This is the link to the GitHub repository to find the expres.js and server code.
 
-- [Live Demo on GitHub Pages](https://thanesha.github.io/Vue-Tuition-app/) 
+- [Live Demo on GitHub Pages](https://thanesha.github.io/)
   This link will take you to the live version of the app where you can interact with it directly.
 
 ## Features
