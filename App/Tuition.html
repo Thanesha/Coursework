@@ -284,7 +284,7 @@ let webstore = new Vue({
     methods: {
         async fetchData() {
             try {        
-                const response = await fetch('https://vue-tuition-app.onrender.com); 
+                const response = await fetch('https://vue-tuition-app.onrender.com/api/lessons'); 
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
