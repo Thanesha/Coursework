@@ -13,7 +13,7 @@ It features product filtering, a shopping cart, and a checkout process.
 - [Tuition App folder](App)
   This is the link to the folder Tuition App.
   
-- [Express.js](route/server.js)  
+- [server.js](/server.js)  
   This is the link to the GitHub repository to find the server.js.
   
 - [Express.js](route/express.js)  
@@ -39,4 +39,4 @@ cd Vue-Tuition-app
 npm install
 npm npm start
 
-After running the server you will be able to interact with the live demo
+
