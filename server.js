@@ -7,7 +7,7 @@ const allowedOrigins = ['https://thanesha.github.io']; // Add your GitHub Pages 
 const apiRouter = require("./route/express"); // Import the API router
 
 const propertiesReader = require('properties-reader');
-const properties = propertiesReader('mongo.properties');
+const properties = propertiesReader('Mongo.properties');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
