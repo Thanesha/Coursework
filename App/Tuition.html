@@ -303,7 +303,7 @@ let webstore = new Vue({
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(this.searchQuery)}`); // Fetch search results from the API
+            const response = await fetch(`https://vue-tuition-app.onrender.com/api/search?q=${encodeURIComponent(this.searchQuery)}`); // Fetch search results from the API
             if (response.ok) {
                 this.searchResults = await response.json(); // Update search results
             } else {
@@ -420,7 +420,7 @@ let webstore = new Vue({
 
         // Insert the order document into the orders collection on the server
         try {
-            const response = await fetch('http://localhost:8080/api/orders', {
+            const response = await fetch('https://vue-tuition-app.onrender.com/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -462,7 +462,7 @@ let webstore = new Vue({
             try {
                 for (const update of lessonUpdates) {
                     console.log(`Updating lesson ID ${update.id} with available spaces: ${update.availableSpaces}`);
-                    const response = await fetch(`http://localhost:8080/api/lessons/${update.id}`, {
+                    const response = await fetch(`https://vue-tuition-app.onrender.com/api/lessons/${update.id}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
