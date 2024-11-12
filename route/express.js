@@ -155,19 +155,3 @@ router.get('/search', async (req, res) => {
 });
     return router; // Return the API router
 };
-
-//This code defines an Express.js router module that provides API endpoints for managing lessons and orders in a MongoDB database. 
-//The module exports a function that takes a MongoDB database instance as an argument and returns an Express.js router object.
-
-// The router defines several endpoints:
-
-// GET /lessons: Retrieves all lessons from the database.
-// GET /lessons/:id: Retrieves a lesson by its ID.
-// POST /lessons: Creates a new lesson.
-// PUT /lessons/:id: Updates a lesson by its ID.
-// GET /orders: Retrieves all orders from the database.
-// POST /orders: Creates a new order.
-// GET /search: Searches for lessons based on a search term, matching subject, location, category, price, or available inventory.
-
-// Each endpoint handles errors and returns appropriate HTTP status codes and error messages.
-// The code uses MongoDB's `find` and `insertOne` methods to interact with the database.
