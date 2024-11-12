@@ -59,8 +59,8 @@ async function startServer() {
     app.use("/api", apiRouter(db)); // Pass the db instance to the router
 
     // Middleware to serve image files
-    app.use("/Images", function(req, res, next) {
-        const filePath = path.join(__dirname, "Images", req.url);
+    app.use("/images", function(req, res, next) {
+        const filePath = path.join(__dirname, "images", req.url);
         fs.stat(filePath, function(err, fileInfo) {
             if (err) {
                 next(); // go to the next middleware if the file doesn't exist
