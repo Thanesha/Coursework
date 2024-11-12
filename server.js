@@ -7,7 +7,7 @@ const allowedOrigins = ['https://thanesha.github.io']; // Add your GitHub Pages 
 const apiRouter = require("./route/express"); // Import the API router
 
 const propertiesReader = require('properties-reader');
-const properties = propertiesReader('new.properties');
+const properties = propertiesReader('mongo.properties');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -51,6 +51,7 @@ async function startServer() {
     });
 
     app.use("/api", apiRouter(db)); // Pass the db instance to the router
+    app.use("/images", express.static(path.join(__dirname, "images")));
 
     // Middleware to serve image files
     app.use("/images", function(req, res, next) {
