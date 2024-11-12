@@ -273,7 +273,7 @@ let webstore = new Vue({
 
     // Created
     created() {
-        //this.fetchLessons(); // Fetch lessons when the component is created
+        this.fetchLessons(); // Fetch lessons when the component is created
         this.fetchData(); // Fetch additional data from your API
 
     },
@@ -284,7 +284,7 @@ let webstore = new Vue({
     methods: {
         async fetchData() {
             try {        
-                const response = await fetch('https://vue-tuition-app.onrender.com/api/lessons'); // For deployed version
+                const response = await fetch('https://vue-tuition-app.onrender.com); 
 
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
