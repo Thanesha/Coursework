@@ -20,8 +20,11 @@ It features product filtering, a shopping cart, and a checkout process.
   This is the link to the render.com route.
   
 - [Lessons collection mongoDB](Coursework1.lessons.json)
+   This is the link to the lessons collection.
 - [Order collection mongoDB](Coursework1.orders.json)
-- [Postman data collection](NewCollection.postman.json)
+   This is the link to the orders collection.
+- [Postman data collection](https://github.com/Thanesha/thanesha.github.io/blob/617fa780fbd2e365068a604d036e3adeda461f99/New%20Collection.postman.json)
+    This is the link to the postman collection.
   
 
 
