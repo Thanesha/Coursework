@@ -5,8 +5,10 @@ It features product filtering, a shopping cart, and a checkout process.
 
 ## Links
 
-- [Tuition App](App/Tuition.html)
+- [live Tuition App](App/Tuition.html)
   This is the link to the GitHub repository to find the source code.
+  
+- [Tuition App folder](App)
   
 - [Express.js](route)  
   This is the link to the GitHub repository to find the expres.js and server code.
