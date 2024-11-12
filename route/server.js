@@ -40,7 +40,7 @@ async function startServer() {
     });
 
     // Middleware to serve image files
-    app.use("/images", function(req, res, next) {
+    app.use("/Images", function(req, res, next) {
         const filePath = path.join(__dirname, "images", req.url);
         fs.stat(filePath, function(err, fileInfo) {
             if (err) {
