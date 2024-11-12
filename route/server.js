@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const { MongoClient, ServerApiVersion, ObjectId} = require("mongodb");
 const cors = require('cors'); // Import cors
-
+const allowedOrigins = ['https://thanesha.github.io']; // Add your GitHub Pages URL here
 const apiRouter = require("./route/express"); // Import the API router
 
 const propertiesReader = require('properties-reader');
@@ -44,7 +44,7 @@ app.param('collectionName', function(req, res, next, collectionName) { req.colle
 // Start the server and connect to the database
 async function startServer() {
     await connectDB(); // Ensure the database is connected
-    
+
     // Middleware to log incoming requests
     app.use(function(req, res, next) {
         console.log("Request URL: " + req.url);
