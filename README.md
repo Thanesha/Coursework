@@ -10,9 +10,6 @@ It features product filtering, a shopping cart, and a checkout process.
 - [live Tuition App](App/Tuition.html)
   This is the link to the live Tuition App.
   
-- [Tuition App folder](App)
-  This is the link to the folder Tuition App.
-  
 - [server.js](/server.js)  
   This is the link to the GitHub repository to find the server.js.
   
