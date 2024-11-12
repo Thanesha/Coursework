@@ -18,12 +18,6 @@ app.use(cors({
     credentials: true // Allow credentials if needed
 }));
 
-// MongoDB connection
-// const url = 'mongodb+srv://Th660:UcY1CUjA9tv7jVpW@cluster0.cxk7ils.mongodb.net/';
-// const client = new MongoClient(url);
-// let db;
-
-
 const dbprefix = properties.get('db.prefix');
 const dbhost = properties.get('db.host');
 const dbname = properties.get('db.name');
