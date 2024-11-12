@@ -15,8 +15,9 @@ It features product filtering, a shopping cart, and a checkout process.
   
 - [Express.js](route/express.js)  
   This is the link to the GitHub repository to find the express.js.
-  
 
+-[Render](https://dashboard.render.com/web/srv-csoq3kpu0jms738nvgmg/deploys/dep-cspopljtq21c73983f40)
+This is the link to the render.com route.
 
 ## Features
 
@@ -24,16 +25,3 @@ It features product filtering, a shopping cart, and a checkout process.
 - Add products to the cart
 - Checkout process with form validation
 - Order receipt display after purchase
-
-## Installation
-
-To run this project locally, clone the repository and install the dependencies:
-
-```bash
-git clone https://github.com/Thanesha/Vue-Tuition-app.git
-cd Vue-Tuition-app
-
-npm install
-npm start
-
-
