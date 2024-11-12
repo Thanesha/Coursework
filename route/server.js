@@ -11,7 +11,12 @@ const properties = propertiesReader('new.properties');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON bodies
-app.use(cors());
+
+app.use(cors({
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+    credentials: true // Allow credentials if needed
+}));
 
 // MongoDB connection
 // const url = 'mongodb+srv://Th660:UcY1CUjA9tv7jVpW@cluster0.cxk7ils.mongodb.net/';
