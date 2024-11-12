@@ -1,16 +1,15 @@
-var express = require("express");
-var router = express.Router();
-const { ObjectId } = require('mongodb');
-
+var express = require("express"); // Import the express framework
+var router = express.Router(); // Create a new router object
+const { ObjectId } = require('mongodb'); 
 module.exports = function(db) {
-    const lessonsCollection = db.collection("lessons");
-    const ordersCollection = db.collection("orders"); 
+    const lessonsCollection = db.collection("lessons"); // Get the "lessons" collection
+    const ordersCollection = db.collection("orders"); // Get the "orders" collection 
 
     // Route to get all lessons
     router.get("/lessons", async function(req, res) {
         try {
             const lessons = await lessonsCollection.find().toArray(); // Fetch all lessons from MongoDB
-            res.json(lessons);
+            res.json(lessons);// Return lessons as JSON
         } catch (err) {
             console.error(err);
             res.status(500).send("Error retrieving lessons");
@@ -19,7 +18,7 @@ module.exports = function(db) {
 
     // Route to get a lesson by ID
     router.get("/lessons/:id", async function(req, res) {
-        const id = parseInt(req.params.id, 10);
+        const id = parseInt(req.params.id, 10); // Parse the lesson ID from the URL parameters
         try {
             const lesson = await lessonsCollection.findOne({ id: id });
             if (lesson) {
@@ -29,7 +28,7 @@ module.exports = function(db) {
             }
         } catch (err) {
             console.error(err);
-            res.status(500).send("Error retrieving lesson");
+            res.status(500).send("Error retrieving lesson"); // Return a 500 error if there's an issue
         }
     });
 
@@ -46,7 +45,7 @@ router.post("/lessons", async function(req, res) {
             return res.status(500).send("Error saving lesson"); // Return an error message if insertion fails
         }
     } catch (err) {
-        console.error("Error during lesson insertion:", err); // Log the error
+        console.error("Error during lesson insertion:", err); 
         return res.status(500).send("Error  lesson"); // Return an error message if an error occurs
     }
 });
@@ -78,6 +77,7 @@ router.get("/orders", async function(req, res) {
         res.status(500).send("Error retrieving orders");
     }
 });
+
 // Route to add a new order
 router.post("/orders", async function(req, res) {
     const newOrder = req.body; // Get the order data from the request body
@@ -94,7 +94,23 @@ router.post("/orders", async function(req, res) {
         return res.status(500).send("Error saving order");
     }
 });
+// Route to delete a lesson by ID
+router.delete("/lessons/:id", async function(req, res) {
+    const id = parseInt(req.params.id, 10); // Parse the lesson ID from the URL
 
+    try {
+        const result = await lessonsCollection.deleteOne({ id: id }); // Delete the lesson from MongoDB
+        if (result.deletedCount === 0) {
+            return res.status(404).send("Lesson not found"); // Return 404 if no lesson matches the ID
+        }
+        res.status(200).send("Lesson deleted successfully"); // Return success message
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error deleting lesson"); // Return error message if an error occurs
+    }
+});
+
+// Route to search for lessons
 router.get('/search', async (req, res) => {
     const searchTerm = req.query.q; // Get the search term from the query parameters
 
@@ -103,7 +119,7 @@ router.get('/search', async (req, res) => {
     }
 
     try {
-        const priceNumber = parseFloat(searchTerm);
+        const priceNumber = parseFloat(searchTerm); //parse the search term as a number
         const inventoryNumber = parseInt(searchTerm, 10);
         // First, try to find exact matches
         const exactMatches = await lessonsCollection.find({
@@ -120,13 +136,13 @@ router.get('/search', async (req, res) => {
         if (exactMatches.length > 0) {
             return res.json(exactMatches);
         }
-        // If no exact matches, perform a case-insensitive search
+        // If no exact matches, perform a case-insensitive search using regular expression
         const lessons = await lessonsCollection.find({
             $or: [
                 { subject: { $regex: searchTerm, $options: 'i' } },
                 { location: { $regex: searchTerm, $options: 'i' } },
                 { category: { $regex: searchTerm, $options: 'i' } },
-                { price:  priceNumber }, // This is not ideal for numbers
+                { price:  priceNumber }, 
                 { availableInventory: inventoryNumber }
             ]
         }).toArray();
@@ -139,3 +155,19 @@ router.get('/search', async (req, res) => {
 });
     return router; // Return the API router
 };
+
+//This code defines an Express.js router module that provides API endpoints for managing lessons and orders in a MongoDB database. 
+//The module exports a function that takes a MongoDB database instance as an argument and returns an Express.js router object.
+
+// The router defines several endpoints:
+
+// GET /lessons: Retrieves all lessons from the database.
+// GET /lessons/:id: Retrieves a lesson by its ID.
+// POST /lessons: Creates a new lesson.
+// PUT /lessons/:id: Updates a lesson by its ID.
+// GET /orders: Retrieves all orders from the database.
+// POST /orders: Creates a new order.
+// GET /search: Searches for lessons based on a search term, matching subject, location, category, price, or available inventory.
+
+// Each endpoint handles errors and returns appropriate HTTP status codes and error messages.
+// The code uses MongoDB's `find` and `insertOne` methods to interact with the database.
